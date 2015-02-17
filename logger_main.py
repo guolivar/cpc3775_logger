@@ -13,6 +13,7 @@ while True:
 	# Get a line of data from the instrument
 	while True:
 		c = ser.read(1)
+		print(c)
 		if c:
 			line += c
 			if line[-leneol:] == eol:
