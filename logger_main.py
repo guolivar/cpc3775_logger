@@ -12,15 +12,16 @@ ser.flushOutput()
 while True:
 	# Get a line of data from the instrument
 	while True:
-        c = ser.read(1)
-        if c:
-            line += c
-            if line[-leneol:] == eol:
-                break
-        else:
-            break
+		c = ser.read(1)
+		if c:
+			line += c
+			if line[-leneol:] == eol:
+				break
+			else:
+				break
 	# Debugging only ... REMOVE IT FOR DEPLOYMENT
 	print(line)
+	break
 	# Parse the data line
 	
 	# Add timestamp
