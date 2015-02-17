@@ -5,7 +5,7 @@ eol = b'\r'
 leneol = len(eol)
 line = bytearray()
 # Open the serial port and clean the I/O buffer
-ser = serial.Serial('/dev/ttyUSB0',115200)
+ser = serial.Serial('/dev/ttyUSB1',9600)
 ser.flushInput()
 ser.flushOutput()
 # Start the logging
@@ -13,16 +13,11 @@ while True:
 	# Get a line of data from the instrument
 	while True:
 		c = ser.read(1)
-		print(c)
-		if c:
-			line += c
-			if line[-leneol:] == eol:
-				break
-			else:
-				break
+		line += c
+		if line[-leneol:] == eol:
+			break
 	# Debugging only ... REMOVE IT FOR DEPLOYMENT
 	print(line)
-	break
 	# Parse the data line
 	
 	# Add timestamp
