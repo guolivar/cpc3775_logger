@@ -54,7 +54,7 @@ while True:
 	rec_time=time.gmtime()
 	timestamp = time.strftime("%Y/%m/%d %H:%M:%S GMT",rec_time)
 	# SAMPLE LINE ONLY
-	line = "3.15E+01,0000,39.0,14.0,40.0,33.0,98.8,54.9,0.054,31,FULL (2475)"
+	# line = "3.15E+01,0000,39.0,14.0,40.0,33.0,98.8,54.9,0.054,31,FULL (2475)"
 	split_indx=line.find(',')
 	concentration = eval(line[:split_indx])
 	min_concentration += concentration
@@ -67,6 +67,7 @@ while True:
 	current_file.write(line+"\n")
 	current_file.flush()
 	current_file.close()
+	line = ""
 	# Is it the top of the minute?
 	if rec_time[4] == prev_minute:
 		# YES! --> generate the psql statement
