@@ -15,21 +15,21 @@ n_concentration = 0
 insert_statement = """INSERT INTO data.fixeddata 
 (parameterid,value,siteid,recordtime) 
 VALUES (%s,%s,%s,timestamptz %s);"""
-
 # Read the settings from the settings file
 settings_file = open("./settings.txt")
 # e.g. "/dev/ttyUSB0"
-port = settings_file.readline()
+port = settings_file.readline().rstrip('\n')
 # path for data files
 # e.g. "/home/logger/datacpc3775/"
-datapath = settings_file.readline()
+datapath = settings_file.readline().rstrip('\n')
 # psql connection string
 # e.g "user=datauser password=l3tme1n host=penap-data.dyndns.org dbname=didactic port=5432"
-db_conn = settings_file.readline()
+db_conn = settings_file.readline().rstrip('\n')
 # ID values for the parameters and site (DATA, ERROR, SITE)
 # e.g. "408,409,2" == CPCdata,CPCerror,QueenStreet
-params = settings_file.readline().split(",")
-
+params = settings_file.readline().rstrip('\n').split(",")
+# Close the settings file
+settings_file.close()
 # Hacks to work with custom end of line
 eol = b'\r'
 leneol = len(eol)

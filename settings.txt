@@ -1,4 +1,4 @@
 /dev/ttyUSB0
 /home/logger/datacpc3775/
 user=datauser password=l3tme1n host=penap-data.dyndns.org dbname=didactic port=5432
-408,409,2
+408,409,1
