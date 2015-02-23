@@ -33,7 +33,7 @@ settings_file.close()
 # Hacks to work with custom end of line
 eol = b'\r'
 leneol = len(eol)
-line = bytearray()
+bline = bytearray()
 # Open the serial port and clean the I/O buffer
 ser = serial.Serial(port,115200)
 ser.flushInput()
@@ -41,14 +41,15 @@ ser.flushOutput()
 # Start the logging
 while True:
 	# Request a data line from the instrument
-	ser.write('rall')
+	ser.write('rall\r')
 	# Get the line of data from the instrument
 	while True:
 		c = ser.read(1)
-		line += c
-		if line[-leneol:] == eol:
+		bline += c
+		if bline[-leneol:] == eol:
 			break
 	# Parse the data line
+	line = bline.decode("utf-8")
 	# Set the time for the record
 	rec_time_s = int(time.time())
 	rec_time=time.gmtime()
@@ -64,12 +65,13 @@ while True:
 	file_line = timestamp+','+line
 	# Save it to the appropriate file
 	current_file = open(datapath+time.strftime("%Y%m%d.txt",rec_time))
-	current_file.write(line+"\n")
+	current_file.write(file_line+"\n")
 	current_file.flush()
 	current_file.close()
 	line = ""
+	bline = bytearray()
 	# Is it the top of the minute?
-	if rec_time[4] == prev_minute:
+	if rec_time[4] != prev_minute:
 		# YES! --> generate the psql statement
 		# Average for the minute with what we have
 		min_concentration = min_concentration / n_concentration
