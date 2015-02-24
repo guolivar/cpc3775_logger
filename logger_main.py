@@ -74,6 +74,7 @@ while True:
 	bline = bytearray()
 	# Is it the top of the minute?
 	if rec_time[4] != prev_minute:
+		prev_minute = rec_time[4]
 		# YES! --> generate the psql statement
 		# Average for the minute with what we have
 		min_concentration = min_concentration / n_concentration
