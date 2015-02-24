@@ -2,6 +2,7 @@
 import serial # Serial communications
 import time # Timing utilities
 import psycopg2 # PostgreSQL wrapper
+import subprocess # Shell utilities ... compressing data files
 
 # Set the time constants
 rec_time=time.gmtime()
