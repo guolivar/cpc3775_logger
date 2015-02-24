@@ -8,7 +8,6 @@ import subprocess # Shell utilities ... compressing data files
 rec_time=time.gmtime()
 timestamp = time.strftime("%Y/%m/%d %H:%M:%S GMT",rec_time)
 prev_minute=rec_time[4]
-prev_file_name = datapath+time.strftime("%Y%m%d.txt",rec_time)
 # Set the minute averaging variable
 min_concentration=0
 n_concentration = 0
@@ -23,6 +22,7 @@ port = settings_file.readline().rstrip('\n')
 # path for data files
 # e.g. "/home/logger/datacpc3775/"
 datapath = settings_file.readline().rstrip('\n')
+prev_file_name = datapath+time.strftime("%Y%m%d.txt",rec_time)
 # psql connection string
 # e.g "user=datauser password=l3tme1n host=penap-data.dyndns.org dbname=didactic port=5432"
 db_conn = settings_file.readline().rstrip('\n')
