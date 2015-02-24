@@ -1,4 +1,9 @@
 /dev/ttyUSB0
 /home/logger/datacpc3775/
-user=datauser password=l3tme1n host=penap-data.dyndns.org dbname=didactic port=5432
+user=user password=password host=data.base.server.com dbname=dbname port=5432
 408,409,1
+## Only the first lines are processed.
+1 <SERIAL PORT ADDRESS>
+2 <DATA SAVE PATH>
+3 <DATABASE CONNECTION STRING>
+4 <DATABASE INSERT IDs>

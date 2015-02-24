@@ -80,8 +80,8 @@ while True:
 		cur = con.cursor()
 		# Insert the DATA record
 		cur.execute(insert_statement,
-		params[0],
-		min_concentration,params[2],timestamp)
+		(params[0],min_concentration,params[2]),
+		timestamp)
 		# Insert the ERROR record
 		cur.execute(insert_statement,
 		params[1],
