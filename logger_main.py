@@ -8,7 +8,7 @@ import subprocess # Shell utilities ... compressing data files
 rec_time=time.gmtime()
 timestamp = time.strftime("%Y/%m/%d %H:%M:%S GMT",rec_time)
 prev_minute=rec_time[4]
-prev_file = time.strftime("%Y%m%d.txt",rec_time)
+prev_file_name = datapath+time.strftime("%Y%m%d.txt",rec_time)
 # Set the minute averaging variable
 min_concentration=0
 n_concentration = 0
@@ -65,7 +65,8 @@ while True:
 	# Make the line pretty for the file
 	file_line = timestamp+','+line
 	# Save it to the appropriate file
-	current_file = open(datapath+time.strftime("%Y%m%d.txt",rec_time),"a")
+	current_file_name = datapath+time.strftime("%Y%m%d.txt",rec_time)
+	current_file = open(current_file_name,"a")
 	current_file.write(file_line+"\n")
 	current_file.flush()
 	current_file.close()
@@ -93,9 +94,9 @@ while True:
 		min_concentration = 0
 		n_concentration = 0
 	# Is it the last minute of the day?
-	if current_file != prev_file:
-		subprocess.call(["gzip",prev_file])
-		prev_file = current_file
+	if current_file_name != prev_file_name:
+		subprocess.call(["gzip",prev_file_name])
+		prev_file_name = current_file_name
 	# Wait until the next second
 	while int(time.time())<=rec_time_s:
 		#wait a few miliseconds
