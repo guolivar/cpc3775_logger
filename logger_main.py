@@ -12,7 +12,7 @@ prev_file = time.strftime("%Y%m%d.txt",rec_time)
 min_concentration=0
 n_concentration = 0
 # Set the pre/post SQL statement values
-insert_statement = """INSERT INTO data.fixeddata 
+insert_statement = """INSERT INTO data.fixedmeasurements 
 (parameterid,value,siteid,recordtime) 
 VALUES (%s,%s,%s,timestamptz %s);"""
 # Read the settings from the settings file
