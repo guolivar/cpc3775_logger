@@ -64,7 +64,7 @@ while True:
 	# Make the line pretty for the file
 	file_line = timestamp+','+line
 	# Save it to the appropriate file
-	current_file = open(datapath+time.strftime("%Y%m%d.txt",rec_time))
+	current_file = open(datapath+time.strftime("%Y%m%d.txt",rec_time),"a")
 	current_file.write(file_line+"\n")
 	current_file.flush()
 	current_file.close()
