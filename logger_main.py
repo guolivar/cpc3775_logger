@@ -1,7 +1,7 @@
+#!/usr/bin/env python
 # Load the libraries
 import serial # Serial communications
 import time # Timing utilities
-import psycopg2 # PostgreSQL wrapper
 import subprocess # Shell utilities ... compressing data files
 
 # Set the time constants
@@ -15,6 +15,9 @@ n_concentration = 0
 insert_statement = """INSERT INTO data.fixedmeasurements 
 (parameterid,value,siteid,recordtime) 
 VALUES (%s,%s,%s,timestamptz %s);"""
+insert_statement_file = """INSERT INTO data.fixedmeasurements 
+(parameterid,value,siteid,recordtime) 
+VALUES (%s,'%s',%s,timestamptz '%s');\n"""
 # Read the settings from the settings file
 settings_file = open("./settings.txt")
 # e.g. "/dev/ttyUSB0"
@@ -78,22 +81,19 @@ while True:
 		# YES! --> generate the psql statement
 		# Average for the minute with what we have
 		min_concentration = min_concentration / n_concentration
-		# Connect to the database
-		con = psycopg2.connect(db_conn)
-		cur = con.cursor()
+		# Print the missing insert statements to a file
+		# to be processed by another programme
+		sql_buffer = open(datapath + "SQL/inserts.sql","a")
 		# Insert the DATA record
-		cur.execute(insert_statement,
+		sql_buffer.write(insert_statement_file%
 		(params[0],min_concentration,params[2],timestamp))
 		# Insert the ERROR record
-		cur.execute(insert_statement,
-		(params[1],line[split_indx:],params[2],timestamp))
-		# Commit and close connection to the database
-		con.commit()
-		cur.close()
-		con.close()
-		# Reinitialize the cummulative variables
-		min_concentration = 0
-		n_concentration = 0
+		sql_buffer.write(insert_statement_file%
+		(params[0],line[split_indx+1:],params[2],timestamp))
+		sql_buffer.flush()
+		sql_buffer.close()
+	min_concentration = 0
+	n_concentration = 0
 	# Is it the last minute of the day?
 	if current_file_name != prev_file_name:
 		subprocess.call(["gzip",prev_file_name])
