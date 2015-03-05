@@ -12,12 +12,8 @@ prev_minute=rec_time[4]
 min_concentration=0
 n_concentration = 0
 # Set the pre/post SQL statement values
-insert_statement = """INSERT INTO data.fixedmeasurements 
-(parameterid,value,siteid,recordtime) 
-VALUES (%s,%s,%s,timestamptz %s);"""
-insert_statement_file = """INSERT INTO data.fixedmeasurements 
-(parameterid,value,siteid,recordtime) 
-VALUES (%s,'%s',%s,timestamptz '%s');\n"""
+insert_statement = """INSERT INTO data.fixedmeasurements (parameterid,value,siteid,recordtime) VALUES (%s,%s,%s,timestamptz %s);"""
+insert_statement_file = """INSERT INTO data.fixedmeasurements (parameterid,value,siteid,recordtime) VALUES (%s,'%s',%s,timestamptz '%s');\n"""
 # Read the settings from the settings file
 settings_file = open("./settings.txt")
 # e.g. "/dev/ttyUSB0"
