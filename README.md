@@ -30,13 +30,7 @@ There are two scripts to run:
 * `upload_batch_sql.py`. This is the database updater and it it recommended to be run as a cron job every 5 to 10 minutes. Sample cron job:
 ```
 */5 * * * * /home/logger/cpc3775/logger_main.py >> /home/logger/log
-
-For further details contact Gustavo Olivares
-
-
-
-
-
+```
 
 ## Modules required
 * **pyserial**
@@ -44,3 +38,6 @@ For further details contact Gustavo Olivares
 * **time**
 
 For details contact Gustavo Olivares
+
+## License
+Please refer to the [license file](./LICENSE.md)
