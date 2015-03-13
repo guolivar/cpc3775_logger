@@ -21,8 +21,9 @@ user=datauses password=l3tme1n host=penap-data.dyndns.org dbname=didactic port=5
 ## Only the first lines are processed.
 1 <SERIAL PORT ADDRESS>
 2 <DATA SAVE PATH>
-3 <DATABASE CONNECTION STRING>
-4 <DATABASE INSERT IDs>
+3 <local|database for storage>,<COMPRESS DATA? (1 = YES)>
+4 <DATABASE CONNECTION STRING>
+5 <DATABASE INSERT IDs>
 
 ```
 There are two scripts to run:
