@@ -1,20 +1,19 @@
+#!/usr/bin/env python
 # Load the libraries
 import serial # Serial communications
 import time # Timing utilities
-import psycopg2 # PostgreSQL wrapper
+import subprocess # Shell utilities ... compressing data files
 
 # Set the time constants
 rec_time=time.gmtime()
 timestamp = time.strftime("%Y/%m/%d %H:%M:%S GMT",rec_time)
 prev_minute=rec_time[4]
-prev_file = time.strftime("%Y%m%d.txt",rec_time)
 # Set the minute averaging variable
 min_concentration=0
 n_concentration = 0
 # Set the pre/post SQL statement values
-insert_statement = """INSERT INTO data.fixedmeasurements 
-(parameterid,value,siteid,recordtime) 
-VALUES (%s,%s,%s,timestamptz %s);"""
+insert_statement = """INSERT INTO data.fixedmeasurements (parameterid,value,siteid,recordtime) VALUES (%s,%s,%s,timestamptz %s);"""
+insert_statement_file = """INSERT INTO data.fixedmeasurements (parameterid,value,siteid,recordtime) VALUES (%s,'%s',%s,timestamptz '%s');\n"""
 # Read the settings from the settings file
 settings_file = open("./settings.txt")
 # e.g. "/dev/ttyUSB0"
@@ -22,6 +21,8 @@ port = settings_file.readline().rstrip('\n')
 # path for data files
 # e.g. "/home/logger/datacpc3775/"
 datapath = settings_file.readline().rstrip('\n')
+prev_file_name = datapath+time.strftime("%Y%m%d.txt",rec_time)
+flags = settings_file.readline().rstrip().split(',')
 # psql connection string
 # e.g "user=datauser password=l3tme1n host=penap-data.dyndns.org dbname=didactic port=5432"
 db_conn = settings_file.readline().rstrip('\n')
@@ -64,37 +65,40 @@ while True:
 	# Make the line pretty for the file
 	file_line = timestamp+','+line
 	# Save it to the appropriate file
-	current_file = open(datapath+time.strftime("%Y%m%d.txt",rec_time))
+	current_file_name = datapath+time.strftime("%Y%m%d.txt",rec_time)
+	current_file = open(current_file_name,"a")
 	current_file.write(file_line+"\n")
 	current_file.flush()
 	current_file.close()
 	line = ""
 	bline = bytearray()
-	# Is it the top of the minute?
-	if rec_time[4] != prev_minute:
-		# YES! --> generate the psql statement
-		# Average for the minute with what we have
-		min_concentration = min_concentration / n_concentration
-		# Connect to the database
-		con = psycopg2.connect(db_conn)
-		cur = con.cursor()
-		# Insert the DATA record
-		cur.execute(insert_statement,
-		(params[0],min_concentration,params[2]),timestamp))
-		# Insert the ERROR record
-		cur.execute(insert_statement,
-		(params[1],line[split_indx:],params[2],timestamp))
-		# Commit and close connection to the database
-		con.commit()
-		cur.close()
-		con.close()
-		# Reinitialize the cummulative variables
+	## Push data to the DB if required
+	if flags[0] == 'database':
+		# Is it the top of the minute?
+		if rec_time[4] != prev_minute:
+			prev_minute = rec_time[4]
+			# YES! --> generate the psql statement
+			# Average for the minute with what we have
+			min_concentration = min_concentration / n_concentration
+			# Print the missing insert statements to a file
+			# to be processed by another programme
+			sql_buffer = open(datapath + "SQL/inserts.sql","a")
+			# Insert the DATA record
+			sql_buffer.write(insert_statement_file%
+			(params[0],min_concentration,params[2],timestamp))
+			# Insert the ERROR record
+			sql_buffer.write(insert_statement_file%
+			(params[0],line[split_indx+1:],params[2],timestamp))
+			sql_buffer.flush()
+			sql_buffer.close()
 		min_concentration = 0
 		n_concentration = 0
+	# Compress the data if required
 	# Is it the last minute of the day?
-	if current_file != prev_file:
-		subprocess.call(["gzip",prev_file])
-		prev_file = current_file
+	if flags[1] == 1:
+		if current_file_name != prev_file_name:
+			subprocess.call(["gzip",prev_file_name])
+			prev_file_name = current_file_name
 	# Wait until the next second
 	while int(time.time())<=rec_time_s:
 		#wait a few miliseconds
