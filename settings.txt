@@ -1,8 +1,8 @@
 /dev/ttyUSB0
 /home/logger/datacpc3775/
-local,0
+database,0
 user=datauses password=l3tme1n host=penap-data.dyndns.org dbname=didactic port=5432
-408,409,1
+408,409,4
 ## Only the first lines are processed.
 1 <SERIAL PORT ADDRESS>
 2 <DATA SAVE PATH>

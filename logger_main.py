@@ -15,7 +15,7 @@ n_concentration = 0
 insert_statement = """INSERT INTO data.fixedmeasurements (parameterid,value,siteid,recordtime) VALUES (%s,%s,%s,timestamptz %s);"""
 insert_statement_file = """INSERT INTO data.fixedmeasurements (parameterid,value,siteid,recordtime) VALUES (%s,'%s',%s,timestamptz '%s');\n"""
 # Read the settings from the settings file
-settings_file = open("./settings.txt")
+settings_file = open("/home/logger/cpc3775_logger/settings.txt")
 # e.g. "/dev/ttyUSB0"
 port = settings_file.readline().rstrip('\n')
 # path for data files

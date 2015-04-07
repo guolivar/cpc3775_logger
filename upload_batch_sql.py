@@ -4,7 +4,7 @@ import time # Timing utilities
 import psycopg2 # PostgreSQL wrapper
 import subprocess # Shell utilities ... compressing data files
 # Read the settings from the settings file
-settings_file = open("./settings.txt")
+settings_file = open("/home/logger/cpc3775_logger/settings.txt")
 # e.g. "/dev/ttyUSB0"
 port = settings_file.readline().rstrip('\n')
 # path for data files
